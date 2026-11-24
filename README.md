@@ -141,6 +141,31 @@ Use package versions compatible with the Spark version on your EMR release. Do n
 
 The Airflow DAG in `dags/ratings_medallion_pipeline.py` demonstrates the Silver-then-Gold dependency. Configure an Airflow connection or replace the placeholder submit commands with your EMR Serverless `StartJobRun` operator configuration. The DAG intentionally does not start/stop the continuous MSK consumer on every schedule.
 
+### EMR orchestration pipelines
+
+The repository provides three orchestration variants:
+
+- `ratings_medallion_pipeline`: standard EMR Serverless Silver-to-Gold pipeline.
+- `ratings_medallion_emr_serverless`: equivalent Serverless pipeline with environment-variable configuration and CloudWatch/S3 logging.
+- `ratings_medallion_emr_ec2`: submits both batch jobs as ordered EMR EC2 steps and waits for each step.
+
+Package and upload the Spark code before starting either pipeline:
+
+```bash
+export RATINGS_CODE_S3_BUCKET=your-ratings-code-bucket
+scripts/upload_project.sh
+```
+
+Upload the project to S3, then configure MWAA variables:
+
+```text
+aws_region
+ratings_code_s3_bucket
+emr_serverless_application_id
+emr_serverless_execution_role_arn
+emr_cluster_id
+```
+
 ## 5. Data quality and testing
 
 ```bash
