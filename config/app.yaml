@@ -1,0 +1,23 @@
+aws:
+  region: ap-south-1
+
+kafka:
+  topic: movie-ratings
+  bootstrap_servers: localhost:9092
+  starting_offsets: latest
+  max_offsets_per_trigger: 50000
+
+storage:
+  warehouse: s3://YOUR_BUCKET/warehouse/
+  checkpoint: s3://YOUR_BUCKET/checkpoints/ratings-bronze/
+
+catalog:
+  name: glue_catalog
+  database: ratings
+
+tables:
+  bronze: ratings_bronze
+  silver: ratings_silver
+  gold_movie: gold_movie_rating_summary
+  gold_daily: gold_daily_rating_summary
+  gold_user: gold_user_rating_summary
